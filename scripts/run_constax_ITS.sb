@@ -1,0 +1,29 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+
+#SBATCH --time=08:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                 # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=8          # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G                   # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name=UNITE_classify        # you can give your job a name for easier identification (same as -J)
+#SBATCH --output=%x-%j.SLURMout
+##SBATCH --partition=scavenger
+
+########## Command Lines to Run ##########
+
+module load NCBI-BLAST/2.12.0-rhel8
+
+DATADIR=/hpc/group/helab/CONSTAX_ref_dbs/UNITE
+
+constax -b \
+  -d $DATADIR/sh_general_release_dynamic_19.02.2025.fasta \
+  --mem 32000 \
+  -f $DATADIR/training_files_2025.02 \
+  -x ./taxonomy_ITS \
+  -o ./out_ITS \
+  --high_level_db $DATADIR/../High_level/sh_general_release_dynamic_all_19.02.2025.fasta \
+  -n $SLURM_CPUS_PER_TASK \
+  -m 5 \
+  -i ../ITS/ITS_rep-seqs.fasta
+
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

@@ -1,0 +1,668 @@
+---
+title: "05_community_analysis_ITS"
+author: "Julian Liber"
+date: "2025-08-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tibble)
+library(ggplot2)
+library(vegan)
+library(stringr)
+library(readr)
+library(measurements)
+library(ggforce)
+library(plotly)
+library(seqinr)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+```
+
+## R Markdown
+Read in OTU matrix and taxonomy assignments
+
+```{r}
+otus <- read_table("../ITS/ITS_otu-table.txt")
+tax <- read_delim("../ITS/constax_taxonomy.txt", delim = "\t")
+```
+```{r}
+tax %>%
+  group_by(High_level_taxonomy) %>%
+  summarize(count = n()) -> hl_sum
+hl_sum
+
+hl_sum %>%
+  filter(High_level_taxonomy != "Fungi") %>%
+  pull(var = "High_level_taxonomy") -> non_fungi_hits
+```
+
+
+```{r}
+otus_t <- t(otus[,2:dim(otus)[2]])
+head(otus_t)
+rownames(otus_t) <- colnames(otus)[2:dim(otus)[2]]
+colnames(otus_t) <- otus$Sample
+colnames(otus)
+
+otus_t %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "OTU_ID") %>%
+  left_join(tax, by = "OTU_ID") -> comb_otu_ITS
+
+comb_otu_ITS %>%
+  head()
+```
+```{r}
+comb_otu_ITS %>%
+  filter(`Fwd_07--KinnexITS_Rev_40` > 0) %>%
+  group_by(Species) %>%
+  summarize(reads = sum(`Fwd_07--KinnexITS_Rev_40`)) %>%
+  arrange(-reads)
+```
+```{r}
+convert_lat_long <- function(ll_string, index){
+  dir_list <- list(N = 1, S = -1, E = 1, W = -1)
+  dec_coord_vec <- c()
+  coord_vec <- c()
+  dir_vec <- c()
+  if (is.na(ll_string)){
+    return(NA)
+  }
+  else {
+    if (!str_detect(ll_string, ", ")){
+      ll_string <- str_replace(ll_string, ",", ", ")
+    }
+    if (str_detect(ll_string, ".*?\u0081.*")){ # degree sign
+      print("Degree unicode")
+      ll_string <- str_replace_all(ll_string, "?\u0081", "")
+      ll_string <- str_replace_all(ll_string, "'", "")
+      str_lat <- unlist(str_split(ll_string, ", "))[1]
+      str_long <- unlist(str_split(ll_string, ", "))[2]
+      lat <- conv_unit(str_lat, from = "deg_min_sec", to = "dec_deg")
+      long <- conv_unit(str_long, from = "deg_min_sec", to = "dec_deg")
+      dec_coord_vec <- as.numeric(c(lat, long))
+    }
+    else if (str_detect(ll_string, "[0-9]{1,3}°[0-9]{1,2}′[0-9]{1,2}″ [N|S]  [0-9]{1,3}°[0-9]{1,2}′[0-9]{1,2}″ [E|W].*")){ # degree sign
+      # print("Degree °")
+      ll_string <- str_replace_all(ll_string, "°", " ")
+      ll_string <- str_replace_all(ll_string, "′", " ")
+      ll_string <- str_replace_all(ll_string, '″', " ")
+      # print(ll_string)
+      str_lat <- str_split_i(ll_string, " [N|S]  ", 1)
+      str_long <- str_remove(str_split_i(ll_string," [N|S]  ", 2), " [E|W].*")
+      # print(str_lat)
+      # print(str_long)
+      lat <- conv_unit(str_lat, from = "deg_min_sec", to = "dec_deg")
+      long <- conv_unit(str_long, from = "deg_min_sec", to = "dec_deg")
+      dec_coord_vec <- as.numeric(c(lat, long))
+      lat_dir <- str_extract(ll_string, "[NS]")
+      lon_dir <- str_extract(ll_string, "[EW]")
+      if (lat_dir == "S"){
+        dec_coord_vec[1] <- dec_coord_vec[1]*-1
+      }
+      if (lat_dir == "W"){
+        dec_coord_vec[2] <- dec_coord_vec[2]*-1
+      }
+      # print(dec_coord_vec)
+    }
+    else if (str_detect(ll_string, "[0-9]{1,3}°[0-9]{1,2}′[0-9\\.]{1,5}″[N|S], [0-9]{1,3}°[0-9]{1,2}′[0-9\\.]{1,5}″[E|W].*")){ # degree sign
+      # print("Degree °")
+      ll_string <- str_replace_all(ll_string, "°", " ")
+      ll_string <- str_replace_all(ll_string, "′", " ")
+      ll_string <- str_replace_all(ll_string, '″', " ")
+      # print(ll_string)
+      str_lat <- str_split_i(ll_string, "[N|S], ", 1)
+      str_long <- str_remove(str_split_i(ll_string,"[N|S], ", 2), "[E|W].*")
+      # print(str_lat)
+      # print(str_long)
+      lat <- conv_unit(str_lat, from = "deg_min_sec", to = "dec_deg")
+      long <- conv_unit(str_long, from = "deg_min_sec", to = "dec_deg")
+      dec_coord_vec <- as.numeric(c(lat, long))
+      lat_dir <- str_extract(ll_string, "[NS]")
+      lon_dir <- str_extract(ll_string, "[EW]")
+      if (lat_dir == "S"){
+        dec_coord_vec[1] <- dec_coord_vec[1]*-1
+      }
+      if (lat_dir == "W"){
+        dec_coord_vec[2] <- dec_coord_vec[2]*-1
+      }
+      # print(dec_coord_vec)
+    }
+    else if (str_detect(ll_string, ".*?\u00C1.*")){ # such as "38Á 31.899', -121Á 45.204'"
+      ll_string <- str_replace_all(ll_string, "\u00C1", "")
+      ll_string <- str_replace_all(ll_string, "'", "")
+      str_lat <- unlist(str_split(ll_string, ", "))[1]
+      str_long <- unlist(str_split(ll_string, ", "))[2]
+      if (str_detect(ll_string, "\\.")){ # degree minute
+        lat <- conv_unit(str_lat, from = "deg_dec_min", to = "dec_deg")
+        long <- conv_unit(str_long, from = "deg_dec_min", to = "dec_deg")
+      }
+      else { # degree minute second
+        lat <- conv_unit(str_lat, from = "deg_min_sec", to = "dec_deg")
+        long <- conv_unit(str_long, from = "deg_min_sec", to = "dec_deg") 
+      }
+      dec_coord_vec <- as.numeric(c(lat, long))
+    }
+    else if (! str_detect(ll_string, "\\.")){ 
+      # print("No decimals")
+      if (str_detect(ll_string, "[NS]\\d")){
+        lat_dir <- str_extract(ll_string, "[NS]")
+        lon_dir <- str_extract(ll_string, "[EW]")
+        ll_split <- str_extract_all(ll_string, "[NSEW]\\d[\\d\\s]*\\d", simplify = T)
+        for (i in ll_split){
+          coord_str <- str_extract(i, "\\d[\\d\\s]*\\d")
+          coord <- conv_unit(coord_str, from = "deg_min_sec", to = "dec_deg")
+          dir <- str_extract(i, "[NSEW]")
+          if (! is.na(coord)){
+            coord_vec <- c(coord_vec, coord)
+          }
+          if (! is.na(dir)){
+            dir_vec <- c(dir_vec, dir)
+          }
+        }
+      }
+      else { # string without decimals, like 44 N 83 W
+        ll_split <- unlist(str_split(ll_string, "\\s"))
+        for (i in ll_split){
+          coord <- str_extract(i, "\\d{1,3}")
+          dir <- str_extract(i, "[NSEW]")
+          if (! is.na(coord)){
+            coord_vec <- c(coord_vec, coord)
+          }
+          if (! is.na(dir)){
+            dir_vec <- c(dir_vec, dir)
+          }
+        }
+      }
+      for (i in 1:2){
+        dec_coord <- dir_list[[dir_vec[i]]]*as.numeric(coord_vec[i])
+        dec_coord_vec <- c(dec_coord_vec, dec_coord)
+      }
+      return(dec_coord_vec[index])
+    }
+    else if(str_detect(ll_string, "\\.") & ! str_detect(ll_string, "N|S|E|W")) {
+      # print("Decimal without directions")
+      ll_split <- unlist(str_split(ll_string, "\\s"))
+      for (i in ll_split){
+        coord <- str_extract(i, "[0-9\\-]{1,4}\\.\\d*")
+        if (! is.na(coord)){
+          coord_vec <- c(coord_vec, coord)
+        }
+      }
+      return(as.numeric(coord_vec[index]))
+    }
+    else { # Decimal string like 44.134 N 83.221 W or with directions first
+      # print("Decimal with following direction")
+      if (str_detect(ll_string, "[NS]\\d")){
+        lat_dir <- str_extract(ll_string, "[NS]")
+        lon_dir <- str_extract(ll_string, "[EW]")
+        ll_split <- str_extract_all(ll_string, "[NSEW]\\d[\\d\\s\\.]*\\d", simplify = T)
+        for (i in ll_split){
+          coord_str <- str_extract(i, "\\d[\\d\\s\\.]*\\d")
+          coord <- conv_unit(coord_str, from = "deg_min_sec", to = "dec_deg")
+          dir <- str_extract(i, "[NSEW]")
+          if (! is.na(coord)){
+            coord_vec <- c(coord_vec, coord)
+          }
+          if (! is.na(dir)){
+            dir_vec <- c(dir_vec, dir)
+          }
+        }
+        for (i in 1:2){
+          dec_coord <- dir_list[[dir_vec[i]]]*as.numeric(coord_vec[i])
+          dec_coord_vec <- c(dec_coord_vec, dec_coord)
+        }
+      }
+      else {
+        ll_split <- unlist(str_split(ll_string, "\\s"))
+        for (i in ll_split){
+          coord <- str_extract(i, "\\d{1,3}\\.\\d*")
+          dir <- str_extract(i, "[NSEW]")
+          if (! is.na(coord)){
+            coord_vec <- c(coord_vec, coord)
+          }
+          if (! is.na(dir)){
+            dir_vec <- c(dir_vec, dir)
+          }
+        }
+        for (i in 1:2){
+          dec_coord <- dir_list[[dir_vec[i]]]*as.numeric(coord_vec[i])
+          dec_coord_vec <- c(dec_coord_vec, dec_coord)
+        }
+      }
+    }
+    return(dec_coord_vec[index])
+  }
+}
+```
+
+```{r}
+sample_info <- read_delim("../metadata/sample_data.txt", delim = "\t")
+sample_info$`Lat-Long`
+
+library_names <- read_csv("../ITS/SampleReturn_ITS.csv") %>%
+  mutate(lib_name = str_remove(Primer_ID, "^KinnexITS_"))
+library_names
+
+library_names %>%
+  left_join(sample_info %>%
+    rowwise() %>%
+    mutate(lat = convert_lat_long(`Lat-Long`, 1),
+           lon = convert_lat_long(`Lat-Long`, 2)) %>%
+    mutate(Sample_Name = str_c(`Sample prefix`, "_", `Sample number`),
+           Location = str_split_i(Sample_name_desc, "_", 1)),
+    by = "Sample_Name") -> library_data
+```
+
+```{r}
+row_counts <- rowSums(otus_t)
+
+plant <- sum(row_counts[comb_otu_ITS$High_level_taxonomy == "Viridiplantae"])
+no_phylum <- sum(row_counts[is.na(comb_otu_ITS$Phylum) | comb_otu_ITS$Phylum == ""])
+off_target <- sum(row_counts[comb_otu_ITS$High_level_taxonomy  %in% non_fungi_hits])
+filt_1 <- comb_otu_ITS %>%
+    filter(!High_level_taxonomy %in% c("Viridiplantae"),
+           !is.na(Phylum),
+           !High_level_taxonomy %in% non_fungi_hits)
+
+reads_input <- row_counts %>% sum(.)
+reads_kept <- filt_1 %>% 
+  dplyr::select(all_of(otus$Sample)) %>%
+  as.matrix(.) %>% sum(.)
+print(paste0("Reads input: ", reads_input %>% format(big.mark = ",")))
+print(paste0("Reads kept: ", reads_kept %>% sum(.) %>% format(big.mark = ","), " (", round(100*reads_kept/reads_input, 2), "%)"))
+print("Reads removed:")
+print(paste0("    Plant: ", plant %>% format(big.mark = ","),
+             " (", round(100*plant/reads_input, 2), "%)"))
+print(paste0("    Off target: ", off_target %>% format(big.mark = ","),
+             " (", round(100*off_target/reads_input, 2), "%)"))
+print(paste0("    No phylum: ", no_phylum %>% format(big.mark = ","),
+             " (", round(100*no_phylum/reads_input, 2), "%)"))
+```
+After filtering based on taxonomy assignment, we keep 89.52% of reads.
+
+```{r}
+library_data %>%
+  filter(!str_detect(Sample_Name, "^NC25")) %>%
+  pull(var = "lib_name") -> control_samples
+
+
+control_counts <- rowSums(otus_t[,colnames(otus_t) %in% control_samples])
+
+max(control_counts/row_counts)
+```
+The control counts are at most 0.08% of a given OTU, so I'm not going to filter any out.
+Only run below code once (it will take a while).
+
+```{r}
+# filt_otus <- otus[,filt_1$OTU_ID]
+# r <- 1e3
+# n <- 1e3
+# res_mat <- matrix(0, nrow = dim(filt_otus)[1], ncol = dim(filt_otus)[2])
+# for (i in 1:r){
+#   res_mat <- res_mat + rrarefy(filt_otus, n)
+# }
+# rowSums(res_mat)
+# 
+# rare_filt_otus <- res_mat/r
+# rare_filt_otus %>%
+#   as.data.frame() %>%
+#   write_csv("../ITS/OTU_table_1000rep_rare.csv")
+```
+
+```{r}
+rare_filt_otus<- read.csv("../ITS/OTU_table_1000rep_rare.csv")
+rare_filt_otus %>%
+  t() %>%
+  as.data.frame() -> rare_otus_t
+
+alpha_div_df <- data.frame(lib_name = otus$Sample,
+                           Shannon = diversity(rare_filt_otus, index = "shannon"),
+                           Inv_Simpson = diversity(rare_filt_otus, index = "invsimpson")) %>%
+  left_join(library_data, by = "lib_name")
+
+
+alpha_div_df %>%
+  pivot_longer(cols = Shannon:Inv_Simpson, names_to = "metric", values_to = "Alpha Diversity") %>%
+  ggplot(aes(x = Phenotype, y = `Alpha Diversity`, color = Phenotype)) +
+  geom_boxplot(outliers = F) +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  facet_wrap(~metric, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = -40, hjust = 0, vjust = 0.5),
+        legend.position = "none") +
+  labs(x = "Sample_type") -> g
+g
+ggsave("../figs/alpha_diversity_fungi.svg", g, width = 8, height = 4)
+
+alpha_div_df %>%
+  filter(!Material %in% c("Plant", "Soil", "Unknown", "Water", NA, "Air")) %>%
+  pivot_longer(cols = Shannon:Inv_Simpson, names_to = "metric", values_to = "Alpha Diversity") %>%
+  ggplot(aes(x = Material, y = `Alpha Diversity`, color = Material)) +
+  geom_boxplot(outliers = F) +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  facet_wrap(~metric, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = -40, hjust = 0, vjust = 0.5),
+        legend.position = "none") +
+  labs(x = "Building Material") -> g
+g
+ggsave("../figs/alpha_diversity_fungi_material_type.svg", g, width = 8, height = 4)
+ggsave("../figs/alpha_diversity_fungi_material_type.png", g, width = 8, height = 4)
+
+```
+
+```{r}
+colnames(rare_otus_t) <- otus$Sample
+rare_otus_t %>%
+  rownames_to_column(var = "OTU_ID") %>%
+  left_join(tax, by = "OTU_ID") -> comb_otu_rare_ITS
+
+data.frame(OTU_ID = rownames(rare_otus_t),
+           total_reads = rowSums(rare_otus_t)) %>%
+  left_join(tax, by = "OTU_ID") %>%
+  group_by(Genus) %>%
+  summarize(gen_total = sum(total_reads)) %>%
+  arrange(-gen_total) -> genera_totals
+
+genera_totals %>%
+  filter(!is.na(Genus)) %>%
+  .[1:30,] %>%
+  pull(var = "Genus")-> top_30_gen
+top_30_gen
+
+comb_otu_rare_ITS %>%
+  filter(!Genus %in% top_30_gen) %>%
+  dplyr::select(otus$Sample) %>%
+  colSums() %>%
+  t() %>% 
+  as.data.frame() %>%
+  mutate(Genus = "Other") -> other_sums
+
+other_sums
+
+comb_otu_rare_ITS %>%
+  filter(Genus %in% top_30_gen) %>%
+  group_by(Genus) %>%
+  summarize(across(otus$Sample, ~ sum(.x))) -> gen_sums
+
+palette_31 <- c('#5e0215', '#1d0f6f', '#03149c', '#761c47', '#08926d', '#557741', # Custom color palette for 31 samples
+                '#3c16c2', '#98433c', '#c64f11', '#70a228', '#bf8c01', '#1788b3',
+                '#79de00', '#8e15b8', '#4c64ae', '#5ce331', '#49e26e', '#fe159a',
+                '#c6955d', '#fd8355', '#63b3e1', '#ebd34d', '#a96bfe', '#a3f08d',
+                '#c0adb4', '#8dd2c8', '#d8e587', '#d59eed', '#fe71f4', '#b1dcf0',
+                '#d8e9c7')
+
+rbind(other_sums[,c("Genus", otus$Sample)],
+      gen_sums[,c("Genus", otus$Sample)]) %>%
+  mutate(across(otus$Sample, ~ .x/sum(.x))) %>%
+  # view()
+  pivot_longer(cols = -Genus, names_to = "lib_name", values_to = "abundance") %>%
+  left_join(library_data %>% filter(lib_name %in% otus$Sample), by = "lib_name") -> top_gen_bar_data
+
+top_gen_bar_data %>%
+  filter(!is.na(`Broad-scope substrate`)) %>%
+  mutate(Genus = factor(Genus, levels = c("Other", gen_sums$Genus))) %>%
+  ggplot(aes(x = Sample_name_desc, y = abundance, fill = Genus)) +
+  geom_col() +
+  facet_row(~`Broad-scope substrate`, scales = "free_x", space = "free") +
+  scale_fill_manual(values = palette_31) +
+  # facet_grid(Phenotype ~ ., scales = "free", space = "free") +
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5)) -> g
+g
+
+ggsave("../figs/ITS_genus_plot.svg", g, width = 20, height = 10)
+
+htmlwidgets::saveWidget(ggplotly(g), "../figs/ITS_genus_plot.html")
+
+top_gen_bar_data %>%
+  filter(!is.na(Phenotype)) %>%
+  plot_ly(x = ~Sample_name_desc,
+          y = ~abundance, 
+          color = ~Genus,
+          type = 'bar',
+          colors = palette_31) -> g2
+g2 <- g2 %>% layout(yaxis = list(title = 'Abundance'), 
+                    barmode = 'stack')
+g2 <- g2 + facet_grid(`Broad-scope substrate` ~ ., scales = "free_x")
+htmlwidgets::saveWidget(g2, "../figs/ITS_genus_plot.html")
+```
+```{r}
+library_data %>%
+  filter(!Material %in% c("Plant", "Soil", "Unknown", "Water", NA, "Air")) %>%
+  pull(var = "lib_name")-> mat_samples
+
+# colnames(rare_otus_t) <- otus$Sample
+rare_otus_t %>%
+  dplyr::select(any_of(mat_samples)) %>%
+  rownames_to_column(var = "OTU_ID") %>%
+  left_join(tax, by = "OTU_ID") -> comb_otu_rare_ITS_mat
+mat_samples %in% colnames(comb_otu_rare_ITS_mat)
+
+incl_mat_samples <- mat_samples[mat_samples %in% colnames(comb_otu_rare_ITS_mat)]
+incl_mat_samples
+
+data.frame(OTU_ID = rownames(rare_otus_t),
+           total_reads = rowSums(rare_otus_t %>%
+                                   dplyr::select(any_of(mat_samples)))) %>%
+  left_join(tax, by = "OTU_ID") %>%
+  group_by(Genus) %>%
+  summarize(gen_total = sum(total_reads)) %>%
+  arrange(-gen_total) -> genera_totals
+
+genera_totals %>%
+  filter(!is.na(Genus)) %>%
+  .[1:30,] %>%
+  pull(var = "Genus")-> top_30_gen
+top_30_gen
+
+comb_otu_rare_ITS_mat %>%
+  filter(!Genus %in% top_30_gen) %>%
+  dplyr::select(any_of(mat_samples)) %>%
+  colSums() %>%
+  t() %>% 
+  as.data.frame() %>%
+  mutate(Genus = "Other") -> other_sums
+
+other_sums
+
+comb_otu_rare_ITS_mat %>%
+  filter(Genus %in% top_30_gen) %>%
+  group_by(Genus) %>%
+  summarize(across(any_of(mat_samples), ~ sum(.x))) -> gen_sums
+
+palette_31 <- c('#5e0215', '#1d0f6f', '#03149c', '#761c47', '#08926d', '#557741', # Custom color palette for 31 samples
+                '#3c16c2', '#98433c', '#c64f11', '#70a228', '#bf8c01', '#1788b3',
+                '#79de00', '#8e15b8', '#4c64ae', '#5ce331', '#49e26e', '#fe159a',
+                '#c6955d', '#fd8355', '#63b3e1', '#ebd34d', '#a96bfe', '#a3f08d',
+                '#c0adb4', '#8dd2c8', '#d8e587', '#d59eed', '#fe71f4', '#b1dcf0',
+                '#d8e9c7')
+
+incl_mat_samples
+rbind(other_sums[,c("Genus", incl_mat_samples)],
+      gen_sums[,c("Genus", incl_mat_samples)]) %>%
+  mutate(across(any_of(incl_mat_samples), ~ .x/sum(.x))) %>%
+  # view()
+  pivot_longer(cols = -Genus, names_to = "lib_name", values_to = "abundance") %>%
+  left_join(library_data %>% filter(lib_name %in% incl_mat_samples), by = "lib_name") -> top_gen_bar_data
+
+top_gen_bar_data %>%
+  filter(!is.na(`Broad-scope substrate`)) %>%
+  mutate(Genus = factor(Genus, levels = c("Other", gen_sums$Genus))) %>%
+  ggplot(aes(x = Sample_name_desc, y = abundance, fill = Genus)) +
+  geom_col() +
+  facet_row(~Material, scales = "free_x", space = "free") +
+  scale_fill_manual(values = palette_31) +
+  # facet_grid(Phenotype ~ ., scales = "free", space = "free") +
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5),
+        panel.spacing = unit(2, "lines")) +
+  labs(x = "Sample", y = "Proportional abundance")-> g
+g
+
+ggsave("../figs/ITS_genus_plot_materials.svg", g, width = 14, height = 8)
+ggsave("../figs/ITS_genus_plot_materials.png", g, width = 14, height = 8)
+
+htmlwidgets::saveWidget(ggplotly(g), "../figs/ITS_genus_plot_materials.html")
+
+top_gen_bar_data %>%
+  filter(!is.na(Phenotype)) %>%
+  plot_ly(x = ~Sample_name_desc,
+          y = ~abundance, 
+          color = ~Genus,
+          type = 'bar',
+          colors = palette_31) -> g2
+g2 <- g2 %>% layout(yaxis = list(title = 'Abundance'), 
+                    barmode = 'stack')
+g2 <- g2 + facet_grid(`Broad-scope substrate` ~ ., scales = "free_x")
+htmlwidgets::saveWidget(g2, "../figs/ITS_genus_plot_materials.html")
+```
+
+```{r}
+make_MDS_df <- function(rare_otus, library_data, samples, metric, binary = F){
+  MDS_dat <- metaMDS(rare_otus, distance = metric, binary = binary) # Calculate NMDS axes, using Jaccard distance
+  MDS_points <- MDS_dat$points # Extract coordinates
+  MDS_dat_df <- as.data.frame(MDS_points) %>%
+  mutate(lib_name = samples)%>%
+  left_join(library_data, by = "lib_name") %>%
+  return()
+}
+
+MDS_data.jac <- make_MDS_df(rare_filt_otus, library_data, otus$Sample, "jaccard")
+MDS_data.bray <- make_MDS_df(rare_filt_otus, library_data, otus$Sample, "bray")
+MDS_data.sor <- make_MDS_df(rare_filt_otus, library_data, otus$Sample, "bray", binary = T)
+
+MDS_data.jac %>%
+  ggplot(aes(x = MDS1, y = MDS2, color = `Broad-scope substrate`, shape = Location)) +
+  geom_point() -> g.jac
+
+MDS_data.bray %>%
+  ggplot(aes(x = MDS1, y = MDS2, color = `Broad-scope substrate`, shape = Location)) +
+  geom_point() -> g.bray
+
+MDS_data.sor %>%
+  ggplot(aes(x = MDS1, y = MDS2, color = `Broad-scope substrate`, shape = Location)) +
+  geom_point() -> g.sor
+
+ggsave("../figs/ITS_NMDS_jaccard.svg", g.jac, width = 8, height = 6)
+ggsave("../figs/ITS_NMDS_bray-curtis.svg", g.bray, width = 8, height = 6)
+ggsave("../figs/ITS_NMDS_sor-dice.svg", g.sor, width = 8, height = 6)
+
+```
+
+```{r}
+comb_otu_rare_ITS %>%
+  mutate(across(starts_with("Fwd_"), ~100*.x/sum(.x, na.rm = T))) -> prop_abun
+  
+prop_abun %>%
+  filter(Genus == "Cryptococcus") %>%
+  group_by(Species) %>%
+  summarize(across(starts_with("Fwd_"), ~ sum(.x))) %>%
+  pivot_longer(cols = starts_with("Fwd_"), names_to = "lib_name", values_to = "abundance_percent") %>%
+  left_join(library_data %>% filter(lib_name %in% otus$Sample), by = "lib_name") %>%
+  # view()
+  dplyr::select(Species, abundance_percent, Sample_name_desc) %>%
+  arrange(-abundance_percent)
+
+prop_abun %>%
+  filter(Genus == "Cryptococcus") %>%
+  # dplyr::select(OTU_ID, Species) %>%
+  # view()
+  group_by(Species) %>%
+  summarize(across(starts_with("Fwd_"), ~ sum(.x))) %>%
+  pivot_longer(cols = starts_with("Fwd_"), names_to = "lib_name", values_to = "abundance_percent") %>%
+  left_join(library_data %>% filter(lib_name %in% otus$Sample), by = "lib_name") %>%
+  # view()
+  dplyr::select(Species, abundance_percent, Sample_name_desc) %>%
+  arrange(-abundance_percent)
+
+```
+```{r}
+prop_abun %>%
+  filter(Genus == "Aureobasidium") %>%
+  group_by(Species) %>%
+  summarize(across(starts_with("Fwd_"), ~ sum(.x))) %>%
+  pivot_longer(cols = starts_with("Fwd_"), names_to = "lib_name", values_to = "abundance_percent") %>%
+  left_join(library_data %>% filter(lib_name %in% otus$Sample), by = "lib_name") %>%
+  # view()
+  dplyr::select(Species, abundance_percent, Sample_name_desc) %>%
+  arrange(-abundance_percent)
+```
+
+```{r}
+data.frame(read_count_raw = colSums(otus_t),
+           lib_name = otus$Sample) %>%
+  left_join(library_data %>% filter(lib_name %in% otus$Sample), by = "lib_name") %>%
+  ggplot(aes(x = Phenotype, y = read_count_raw)) +
+  geom_boxplot(outliers = F) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
+  scale_y_log10() +
+  labs(x = "Sample type",
+       y = "Raw read count")-> g
+g
+ggsave("../figs/read_count_fungi_by_sample_type.svg", g, width = 8, height = 4)
+
+```
+
+```{r}
+library(FEAST)
+
+library_data %>%
+  dplyr::select(lib_name, `Broad-scope substrate`,SourceSink, SourceSinkID) %>%
+  dplyr::rename(Env = `Broad-scope substrate`,
+                id = SourceSinkID) %>%
+  column_to_rownames(var = "lib_name")-> feast_meta
+
+FEAST_output <- FEAST(C = otus_t, metadata = feast_meta, different_sources_flag = 1, dir_path = "../ITS",
+                      outfile="feast_output_env_to_built")
+```
+
+```{r}
+site_coords <- read_csv("../metadata/site_coordinates.csv") %>%
+  rowwise() %>%
+  mutate(lon = -1*abs(convert_lat_long(`Lat-Lon`, 2)),
+         lat = convert_lat_long(`Lat-Lon`, 1),
+         lat_lon_convert = paste(lat, lon, sep = ", "))
+
+
+site_coords %>%
+  dplyr::select(Name, lat_lon_convert) %>%
+  write_csv("../metadata/corrected_site_coords.csv")
+```
+
+Table for taxonomic abundance by sample
+```{r}
+sample_name_prop_abun <- prop_abun
+
+data.frame(lib_name = prop_abun %>% 
+             colnames()) %>%
+  left_join(library_names, by = "lib_name") %>%
+  mutate(new_col = ifelse(is.na(Sample_Name), lib_name, Sample_Name)) %>%
+  pull(var = "new_col") -> colnames(sample_name_prop_abun)
+
+sample_name_prop_abun %>%
+  dplyr::select(OTU_ID, Kingdom:HL_hit_query_cover, NC25_9:PCRneg4) %>%
+  write_csv("../ITS/OTU_table_ITS_with_prop_abundance.csv")
+```
+
+```{r}
+otus %>%
+  filter(Sample == "Fwd_03--KinnexITS_Rev_41") %>%
+  pivot_longer(cols = starts_with("OTU_"), 
+               names_to = "OTU",
+               values_to = "Read_count") %>%
+  filter(Read_count > 0) -> otus_NC25_90
+otus_NC25_90 %>%
+  dplyr::rename(OTU_ID = OTU) %>%
+  left_join(tax, by = "OTU_ID") %>%
+  write_delim("../ITS/ITS_NC25_90_tax.txt", 
+              delim = "\t")
+
+otus_NC25_90$OTU
+ITS_seqs <- read.fasta("../ITS/ITS_rep-seqs.fasta")
+
+names(ITS_seqs[otus_NC25_90$OTU])
+write.fasta(sequences = ITS_seqs[otus_NC25_90$OTU],
+            names = names(ITS_seqs[otus_NC25_90$OTU]),
+            file.out = "../ITS/ITS_NC25_90.fasta")
+```

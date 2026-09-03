@@ -1,0 +1,14 @@
+Sample	OTU_ID	Read_count	Kingdom	Phylum	Class	Order	Family	Genus	Species	High_level_taxonomy	HL_hit_percent_id	HL_hit_query_cover
+Fwd_03--KinnexITS_Rev_41	OTU_6	2	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Penicillium	Penicillium brevicompactum	Fungi	99.797	93
+Fwd_03--KinnexITS_Rev_41	OTU_10	32	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Aspergillus	Aspergillus ruber	Fungi	100.000	100
+Fwd_03--KinnexITS_Rev_41	OTU_18	351	Fungi	Ascomycota	Dothideomycetes	Cladosporiales	Cladosporiaceae	Cladosporium	NA	Fungi	99.782	91
+Fwd_03--KinnexITS_Rev_41	OTU_31	105	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Penicillium	NA	Fungi	97.757	100
+Fwd_03--KinnexITS_Rev_41	OTU_49	2	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Penicillium	NA	Fungi	98.138	100
+Fwd_03--KinnexITS_Rev_41	OTU_226	11	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Aspergillus	NA	Fungi	97.645	100
+Fwd_03--KinnexITS_Rev_41	OTU_1272	33	Fungi	Ascomycota	Sordariomycetes	Hypocreales	Stachybotryaceae	Stachybotrys	Stachybotrys chartarum	Fungi	100.000	89
+Fwd_03--KinnexITS_Rev_41	OTU_2647	66	Fungi	Ascomycota	Eurotiomycetes	Eurotiales	Aspergillaceae	Aspergillus	Aspergillus glabripes	Fungi	100.000	95
+Fwd_03--KinnexITS_Rev_41	OTU_6429	98	Fungi	Ascomycota	Sordariomycetes	Sordariales	Chaetomiaceae	Botryotrichum	Botryotrichum atrogriseum	Fungi	99.172	93
+Fwd_03--KinnexITS_Rev_41	OTU_21716	12	Fungi	Ascomycota	Taphrinomycetes	Taphrinales	Taphrinaceae	Taphrina	Taphrina inositophila	Fungi	99.473	100
+Fwd_03--KinnexITS_Rev_41	OTU_22722	9	Fungi	Ascomycota	Dothideomycetes	Cladosporiales	Cladosporiaceae	Cladosporium	NA	Fungi	99.563	91
+Fwd_03--KinnexITS_Rev_41	OTU_23092	8	Fungi	Ascomycota	Sordariomycetes	Hypocreales	Hypocreaceae	Trichoderma	NA	Fungi	99.438	96
+Fwd_03--KinnexITS_Rev_41	OTU_25024	3	Fungi	Ascomycota	Dothideomycetes	Coniosporiales	Coniosporiaceae	Coniosporium	Coniosporium uncinatum	Fungi	98.028	88

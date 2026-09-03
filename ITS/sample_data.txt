@@ -1,0 +1,101 @@
+Timestamp	Sample prefix	Sample number	Sample_name_desc	Collector	Broad-scope substrate	Lat-Long	Sample description	Item (sink, toilet, P-trap, etc.) 	Volume	Column 9	Sample description	Flow rate (LPM)	Sampling time (min)	Sample description	Plant species	Sampling method	Organs sampled	Site description	Sampling method	Sampling area (cm^2)	Substrate description	Substrate description 	Depth minimum (cm)	Depth maximum (cm)	Vegetation	Material
+1/17/2025 16:35:56	NC25	9	GLF_DOWNSTRM_GRASS-1	Julian Liber	Plant	35.6232978, -82.3304456									Turf grass	Material in tube	Leaves	Lawn, 3m from creek, South of building								Plant
+1/17/2025 14:58:07	NC25	11	PW_RIVERPROX_HERB-1	Julian Liber	Plant	35°36′44″ N  82°19′16″ W									Hairy bitter cress 	Material in tube	Leaves	Near building public works, near river								Plant
+1/17/2025 17:45:13	NC25	12	VP_FLOOD_SHRUB-1	Julian Liber	Plant	35.6074252, -82.3381415									Lonicera sp 	Material in tube	Leaves	Fence, likely flooded								Plant
+1/17/2025 14:20:57	NC25	14	PW_HILLSIDE_HERB-1	Julian Liber	Plant	35°36′48″ N  82°19′15″ W									White clover	Material in tube	Leaves	Side of public works 								Plant
+1/17/2025 16:39:09	NC25	15	GLF_DWNSTRM_RIVERDIST_3M_HERB-1	Julian Liber	Plant	35.6232978, -82.3304456									Glechoma hederacea	Material in tube	Leaves	Lawn, 3m from creek, south of building 								Plant
+1/17/2025 17:43:06	NC25	17	VP_FLOOD_HERB-1	Julian Liber	Plant	35.6074252, -82.3381415									English ivy	Material in tube	Leaves	On ground, flooded								Plant
+1/17/2025 16:26:21	NC25	18	GLF_RIVERDIST_45M_HERB-1	Julian Liber	Plant	35.6236532, -82.3301469									White clover 	Material in tube	Leaves	Lawn, 45m from creek, low area with sediment								Plant
+1/17/2025 16:28:18	NC25	19	GLF_RIVERDIST_45M_GRASS-1	Julian Liber	Plant	35.6236532, -82.3301469									Turf grass	Material in tube	Leaves	Lawn, 45m from creek, low area with sediment 								Plant
+1/17/2025 16:08:48	NC25	22	GLF_UPSTRM_RIVERDIST_4M_GRASS-1	Julian Liber	Plant	35.6237870, -82.3307132									Turf grass	Material in tube	Leaves 	~4 m from creek, North of the building								Plant
+1/17/2025 17:41:32	NC25	66	VP_DRY_HERB-1	Julian Liber	Plant	35.6074252, -82.3381415									English ivy	Material in tube	Leaves	On tree, 6ft off ground 								Plant
+1/17/2025 16:14:19	NC25	69	GLF_UPSTRM_RIVERDIST_HERB-1	Julian Liber	Plant	35.6238576, -82.3304302									White clover	Material in tube	Leaves	Lawn, 15m from creek								Plant
+1/17/2025 17:50:56	NC25	70	VP_DWNSTRM_HERB-1	Julian Liber	Plant	35.6078927, -82.3382391									Hairy bittercress	Material in tube	Leaves	Flooded, next to ditch, adjacent to parking lot and baseball fields 								Plant
+1/17/2025 16:21:38	NC25	76	GLF_RIVERDIST_85M_GRASS-1	Julian Liber	Plant	35.6239652, -82.3298471									Turf grass	Material in tube	Leaves	Lawn, 80m from creek 								Plant
+1/17/2025 14:18:31	NC25	77	PW_ENTRANCE_HERB-1	Julian Liber	Plant	35°36′47″ N  82°19′14″ W									Dandelion	Material in tube	Leaves 	Front entrance public works								Plant
+1/17/2025 16:11:53	NC25	79	GLF_UPSTRM_RIVERDIST_GRASS-1	Julian Liber	Plant	35.6238576, -82.3304302									Turf grass 	Material in tube	Leaves	Lawn, 15m from creek, North of building								Plant
+1/17/2025 16:18:48	NC25	81	GLF_RIVERDIST_85M_HERB-1	Julian Liber	Plant	35.6239652, -82.3298471									medicago	Material in tube	Leaves	Lawn, 80m from creek								Plant
+1/17/2025 15:53:41	NC25	86	PW_DRYWALL_INNER-1	Vesper Fraunfelter	Built surface	35°36′46.8″N, 82°19′13″W													Swab		Dry wall (inner)					Drywall
+1/17/2025 15:54:26	NC25	87	PW_DRYWALL_ADHESIVE-1	Vesper Fraunfelter	Built surface	35°36′46.8″N, 82°19′13″W													Swab		Drywall-insulation adhesive					Drywall
+1/17/2025 15:55:29	NC25	88	PW_CONCRETE_FLOOD-1	Vesper Fraunfelter	Built surface	35°36′46.8″N, 82°19′13″W													Swab		Concrete (ground)					Concrete
+1/17/2025 15:56:07	NC25	89	PW_METAL_FLOOD-1	Vesper Fraunfelter	Built surface	35°36′46.8″N, 82°19′13″W													Swab		Metal (flooded)					Metal
+1/17/2025 15:57:22	NC25	90	PW_PLASTIC_FLOOD-1	Vesper Fraunfelter	Built surface	35°36′47″N, 82°19′14.4″W													Swab		Dust on plastic bin					Plastic
+1/17/2025 15:58:31	NC25	91	PW_METAL_FLOOD-2	Vesper Fraunfelter	Built surface	35°36′48.8″N, 82°19′15.3″W													Swab		Metal studs with coloration					Metal
+1/17/2025 15:59:31	NC25	92	PW_CONCRETE_FLOOD-2	Vesper Fraunfelter	Built surface	35°36′48.1″N, 82°19′15.1″W													Swab	Small	Concrete between metal walls					Concrete
+1/17/2025 18:28:26	NC25	93	PW_WOOD_CLEANED-1	Vesper Fraunfelter	Built surface	35°36′47.2″N, 82°19′15.4″W													Swab		Coloration on cleaned wood					Wood
+1/17/2025 14:46:54	NC25	94	PW_PORCEL_SINK-1	Andrew Jones	Built surface	35°36′49″ N  82°19′12″ W													Swab		Men’s restroom sink right					Ceramic
+1/17/2025 18:32:24	NC25	96	PW_PVC_DRAIN_OUTER-1	Vesper Fraunfelter	Built surface	35°36′47.7″N, 82°19′12.8″W													Swab		PVC toilet drain (outer)					Plastic
+1/17/2025 18:33:22	NC25	97	PW_WOOD_SINK-1	Vesper Fraunfelter	Built surface	35°36′47.7″N, 82°19′12.8″W													Swab		Bathroom sink frame (wood)					Wood
+1/17/2025 18:35:59	NC25	98	PW_PLASTIC_FLOOD-2	Vesper Fraunfelter	Built surface	35°36′47.2″N, 82°19′13.2″W													Swab		Mop basin (plastic?)					Plastic
+1/17/2025 14:52:35	NC25	99	PW_BATHROOM-1	Andrew Jones	Built surface	35°36′49″ N  82°19′12″ W													Swab		Women’s restroom right					Unknown
+1/17/2025 14:53:28	NC25	100	PW_BATHROOM-2	Andrew Jones	Built surface	35°36′49″ N  82°19′12″ W													Swab		Women’s restroom left					Unknown
+1/17/2025 18:29:30	NC25	101	PW_WOOD_DRY-1	Vesper Fraunfelter	Built surface	35°36′47.2″N, 82°19′15.4″W													Swab	10	Unflooded wood stud					Wood
+1/17/2025 18:30:31	NC25	102	PW_DRYWALL_DRY-1	Vesper Fraunfelter	Built surface	35°36′47.2″N, 82°19′15.4″W													Swab	10	Unflooded drywall					Drywall
+1/17/2025 18:37:00	NC25	103	PW_PVC_WATERLINE-1	Vesper Fraunfelter	Built surface	35°36′48″ N  82°19′14″ W													Swab		PVC water line with caked on mud					Plastic
+1/17/2025 15:01:18	NC25	104	PW_KTCH_DRAIN_INNER-1	Andrew Jones	Built surface	35°36′47″ N  82°19′12″ W													Swab		Kitchen inner drain 					Metal
+1/17/2025 15:04:25	NC25	105	PW_KTCH_DRAIN_EXT-1	Andrew Jones	Built surface	35°36′47″ N  82°19′12″ W													Swab		Kitchen sink exterior 					Metal
+1/17/2025 15:17:26	NC25	106	PW_DOOR-1	Andrew Jones	Built surface	35°36′48″ N  82°19′14″ W													Swab	Rockey	Removed door 					Unknown
+1/17/2025 15:26:27	NC25	107	PW_WALL_DRY-1	Andrew Jones	Built surface	35°36′47″ N  82°19′12″ W													Swab		Stair wall					Drywall
+1/17/2025 16:47:00	NC25	108	PW_GLASS_INT-1	Andrew Jones	Built surface	35°37′26″ N  82°19′47″ W													Swab	Rockey	Interior glass					Glass
+1/17/2025 15:20:45	NC25	109	PW_GLASS_STORED-1	Andrew Jones	Built surface	35°36′48″ N  82°19′14″ W													Swab	Rockey	Stored glass 					Glass
+1/17/2025 18:34:16	NC25	110	PW_CEILINGTILE-1	Vesper Fraunfelter	Built surface	35°36′47.7″N, 82°19′12.8″W													Swab	10	Ceiling tile top (fiberglass product)					Fiberglass
+1/17/2025 18:39:06	NC25	111	PW_CINDERBLOCK_FLOOD-1	Vesper Fraunfelter	Built surface	35°36′47.2″N, 82°19′15.4″W													Swab	10	Cinderblock (flooded)					Concrete
+1/17/2025 18:40:27	NC25	112	PW_METAL_DRAIN_FLOOD-1	Vesper Fraunfelter	Built surface	35°36′46.5″N, 82°19′15.4″W													Swab		Metal lid to drain pipe; inside of lid. Wet.					Metal
+1/17/2025 16:32:14	NC25	113	GLF_PTRAP-1	Andrew Jones	Built surface	35°37′25″ N  82°19′47″ W													Swab		Inside ptrap					Plastic
+1/17/2025 16:33:43	NC25	114	GLF_DOOR_INT-1	Andrew Jones	Built surface	35°37′25″ N  82°19′47″ W													Swab	Rockey 	Interior door					Unknown
+1/17/2025 16:33:29	NC25	115	GLF_MOLD-1	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab		Black mold					
+1/17/2025 16:44:38	NC25	116	GLF_DOOR_INT-2	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab		Inside door near unit golf course					
+1/17/2025 16:45:44	NC25	117	GLF_MOLD-2	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab		Pink fungus on door inside golf course near unit, below flood libr					
+1/17/2025 16:34:09	NC25	118	GLF_MOLD-3	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab		Fuzzy mold whitish low on wall					
+1/17/2025 16:32:29	NC25	119	GLF_MOLD-4	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab	One spot	Yellow mold					
+1/17/2025 18:44:05	NC25	120	GLF_WOOD_MOLDY-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall with fuzzy white growth					Wood
+1/17/2025 16:46:29	NC25	121	GLF_MOLD-5	Erica Washington	Built surface	35°37′25″ N  82°19′49″ W													Swab		Pink fungus door inside door in golf unit					
+1/17/2025 18:45:09	NC25	122	GLF_WOOD_MOLDY-2	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall, multicolored growth (directly above sample NC25-120)					Wood
+1/17/2025 18:49:26	NC25	123	GLF_WOOD_MOLDY-3	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall with large green splotches					Wood
+1/17/2025 18:46:07	NC25	124	GLF_WOOD_MOLDY-4	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall, multicolored growth by front door					Wood
+1/17/2025 18:47:05	NC25	125	GLF_WOOD_MOLDY-5	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall, multicolor growth 					Wood
+1/17/2025 18:50:09	NC25	126	GLF_METAL_MUDDY-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Sheet metal wall below flood line, covered with chunks of dirt					Metal
+1/17/2025 18:47:59	NC25	127	GLF_WOOD_MOLDY-6	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood(?) panel by front door, multicolored growth more intense than surrounding wall					Wood
+1/17/2025 18:48:37	NC25	128	GLF_METAL_DRY-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Steel beam					Metal
+1/17/2025 18:51:29	NC25	129	GLF_WOOD_OILY_MOLDY-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Wood wall with suspected oil/grease patch, white growth					Wood
+1/17/2025 18:53:38	NC25	130	GLF_METAL_EXT-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab		Sheet metal wall with green growth, outside of building					Metal
+1/17/2025 18:52:21	NC25	131	GLF_CLOTH_MOLDY-1	Vesper Fraunfelter	Built surface	35.6236240, -82.3302575													Swab	10	Cloth wall covering insulation, multicolored growth					Cloth
+1/17/2025 18:07:41	NC25	145	VP_SINK_DRAIN_INT-1	Andrew Jones	Built surface	35°36′29″ N  82°20′13″ W													Swab		Interior sink drain					Metal
+1/17/2025 19:02:19	NC25	154	VP_WOOD_MOLDY-1	Vesper Fraunfelter	Built surface	35.6081050, -82.3381995													Swab		Plywood wall, dark green spots					Wood
+1/17/2025 18:10:50	NC25	158	VP_WOOD_FLOOD-1	Vesper Fraunfelter	Built surface	35.6084815, -82.3371505													Swab	100	Flooded wood beam					Wood
+1/17/2025 18:13:35	NC25	167	VP_PAPER_MUDDY-1	Vesper Fraunfelter	Built surface	35.6084815, -82.3371505													Swab	50	Cardboard box in cabinet, dry, layer of dust/mud.					Paper
+1/17/2025 19:03:00	NC25	172	VP_PVC_FLOOD-1	Vesper Fraunfelter	Built surface	35.6081050, -82.3381995													Swab		PVC pipe, outer					Plastic
+1/17/2025 18:12:56	NC25	176	VP_METAL_DRY-1	Andrew Jones	Built surface	35°36′29″ N  82°20′13″ W													Swab		Second floor concession stand vertical beam					Metal
+1/17/2025 18:08:49	NC25	180	VP_CINDERBLOCK_DRY-1	Vesper Fraunfelter	Built surface	35.6084815, -82.3371505													Swab	100	Cinderblock wall inside concession stand, 8ft above ground, inside, possible mold					Concrete
+1/17/2025 18:05:38	NC25	202	VP_MUD_OUTSIDE-1	Erica Washington	Indoor mud	35°36′31″ N  82°20′14″ W								Mud outside concession 												Soil
+1/17/2025 18:04:53	NC25	203	VP_MUD_TOLIET-1	Erica Washington	Indoor mud 	35°36′31″ N  82°20′14″ W								Mud inside toilet concession stand												Soil
+1/17/2025 17:48:33	NC25	204	VP_MUD_PLAYGROUND-1	Erica Washington	Soil	35°36′28″ N  82°20′20″ W																Mud inside Playground 			None	Soil
+1/17/2025 17:51:27	NC25	204	VP_MUD_PLAYGROUND-2	Erica Washington	Soil	35°36′28″ N  82°20′20″ W																Playground mud			No	Soil
+1/17/2025 17:14:04	NC25	208	GLF_DWNSTRM_16M_RIVERDIST_2M_0CM	Julian Liber	Soil	35.6231907, -82.3303913																Lawn, 2 m from creek, vegetation, next to sediment 	0	2	Turf, clover 	Soil
+1/17/2025 17:12:05	NC25	209	GLF_DWNSTRM_16M_RIVERDIST_2M_2CM	Julian Liber	Soil	35.6231907, -82.3303913																Lawn, 2 m from creek, vegetation, next to sediment 	2	10	Turf, clover 	Soil
+1/17/2025 17:10:34	NC25	210	GLF_DWNSTRM_16M_RIVERDIST_2M_10CM	Julian Liber	Soil	35.6231907, -82.3303913																Lawn, 2 m from creek, vegetation, next to sediment 	10	12	Turf, clover 	Soil
+1/17/2025 17:05:23	NC25	211	GLF_DWNSTRM_0M_RIVERDIST_58M_2CM	Julian Liber	Soil	35.6235801, -82.3299464																Lawn, 58m from creek, 6m from end of culvert	2	6	Turf, clover, chickweed 	Soil
+1/17/2025 17:02:55	NC25	212	GLF_UPSTRM_10M_RIVERDIST_58M_2CM	Julian Liber	Soil	35.6238717, -82.3301308																Lawn, near road, 190ft from creek	2	6	Turf, clover	Soil
+1/17/2025 17:01:26	NC25	213	GLF_UPSTRM_10M_RIVERDIST_58M_0CM	Julian Liber	Soil	35.6238717, -82.3301308																Lawn, 190ft from creek, next to road	0	2	Turf, clover 	Soil
+1/17/2025 16:58:23	NC25	214	GLF_UPSTRM_10M_RIVERDIST_58M_6CM	Julian Liber	Soil	35.6238717, -82.3301308																Lawn, next to road, 190ft to creek	6	8	Turf, clover 	Soil
+1/17/2025 17:04:34	NC25	215	GLF_MUD_INDOOR-1	Erica Washington	Mud indoor	35°37′25″ N  82°19′47″ W								Indoor mud golf												Soil
+1/17/2025 17:05:24	NC25	216	GLF_MUD_INDOOR-2	Erica Washington	Indoor mud	35°37′25″ N  82°19′47″ W								Indoor mud golf												Soil
+1/17/2025 16:50:38	NC25	217	GLF_DWNSTRM_0M_RIVERDIST_58M_0CM	Julian Liber	Soil	35.6235801, -82.3299464																Lawn, 58m from creek, 6m from end of culvert	0	2	Turf, clover, chickweed	Soil
+1/17/2025 16:49:03	NC25	218	GLF_DWNSTRM_0M_RIVERDIST_58M_6CM	Julian Liber	Soil	35.6235801, -82.3299464																Lawn, 58m from creek, 6m up from end of culvert	6	8	Turf, clover, chickweed	Soil
+1/17/2025 16:42:16	NC25	219	GLF_AIR_BREAKROOM-1	Andrew Jones	Air sample	35°37′25″ N  82°19′47″ W					Break room	High flow 	5													Air
+1/17/2025 14:36:21	NC25	220	PW_DWNSTRM_25M_RIVERDIST_40M_CYPRESS_DRY-1	Julian Liber	Dry sample	35°36′48″ N  82°19′19″ W								Leaves hedge above flood line												Plant
+1/17/2025 15:38:41	NC25	221	PW_PLASTIC_DOCS-1	Erica Washington	Documents	35.61309,-82.32053								Plastic on file folder, covered in sediment, moist since the flood												Plastic
+1/17/2025 14:33:51	NC25	222	PW_DWNSTRM_25M_RIVERDIST_40M_CYPRESS_FLOOD-1	Erica Washington	Plant	35.61309,-82.32257									Cypress	Dry sample	Leaves	Hedge along fence, below flood line								Plant
+1/17/2025 14:51:47	NC25	223	PW_UPSTRM_0M_RIVERDIST_10M_2CM	Julian Liber	Soil	35.61209,-82.32111																River side of building, soft sediment on top	2	4	Grasses and speedwell	Soil
+1/17/2025 14:27:07	NC25	224	PW_DWNSTRM_36M_RIVERDIST_57M_BARK_DRY-1	Erica Washington	Plant	35.61314,-82.32259									Silver maple	Dry sample	Bark	Tree in grassy field next to road, above flood line								Plant
+1/17/2025 14:49:27	NC25	225	PW_UPSTRM_0M_RIVERDIST_10M_12CM	Julian Liber	Soil	35.6122,-82.32121																River side of building, soft sediment above, bottom of core 	12	14	Grasses, speedwell	Soil
+1/17/2025 14:29:39	NC25	226	PW_DWNSTRM_36M_RIVERDIST_57M_BARK_FLOOD-1	Erica Washington	Plant	35.61314,-82.32259									Silver maple 	Dry sample	Bark	Tree in grassy field next to road, below flood line								Plant
+1/17/2025 15:37:45	NC25	227	PW_PAPER_DOCS-1	Erica Washington	Documents	35.61309,-82.32053								Wet papers and file folders in office, moist since the flood												Paper
+1/17/2025 16:55:54	NC25	228	GLF_INSULATION-1	Andrew Jones	Built surface	35°37′26″ N  82°19′47″ W													Swab		Insulation					Fiberglass
+1/17/2025 15:42:51	NC25	229	PW_AIR_ATTIC-1	Andrew Jones	Air sample	35°36′47″ N  82°19′12″ W					Upstairs attic 	200	30													Air
+1/17/2025 15:39:18	NC25	230	PW_PAPER_DOCS-2	Erica Washington	Documents	35.61309,-82.32053								File folder, wet since the flood												Paper
+1/17/2025 19:03:51	NC25	232	VP_TOLIET_LID_MUDDY-1	Vesper Fraunfelter	Built surface	35.6081050, -82.3381995													Swab	10	Toilet lid (outer), some dirt coverage 					Plastic
+1/17/2025 15:51:13	NC25	233	PW_WATER_KTCH_SINK-1	Andrew Jones	Water sample	35°36′48″ N  82°19′12″ W		Kitchen sink	1 L																	Water
+1/17/2025 16:40:52	NC25	234	PW_WATER_PTRAP-1	Andrew Jones	Water sample	35°37′25″ N  82°19′47″ W		P-trap	45 mL																	Water
+1/17/2025 18:20:23	NC25	238	VP_MUD_TOLIET-2	Andrew Jones	Soil	35°36′29″ N  82°20′13″ W																Concession stand toilet 				Soil
+1/17/2025 18:21:48	NC25	238	VP_MUD_SINK-1	Andrew Jones	Soil	35°36′29″ N  82°20′13″ W																Sink drain				Soil

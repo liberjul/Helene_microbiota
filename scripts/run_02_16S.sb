@@ -1,0 +1,24 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+
+#SBATCH --time=01:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                 # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=4          # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G                   # memory required per node - amount of memory (in bytes)
+#SBATCH --array=1-11
+#SBATCH --job-name=16S_filt_trim        # you can give your job a name for easier identification (same as -J)
+#SBATCH --output=%x-%j.SLURMout
+##SBATCH --partition=scavenger
+
+########## Command Lines to Run ##########
+
+module load R/4.4.3
+
+NUM=$(printf "%02d" "$SLURM_ARRAY_TASK_ID")
+
+sed "s/Fwd_XXX/Fwd_$NUM/g" 02a_16S_DADA2_filter_trim_template.R > 02a_16S_DADA2_filter_trim_Fwd_"$NUM".R
+
+Rscript 02a_16S_DADA2_filter_trim_Fwd_"$NUM".R
+
+scontrol show job $SLURM_JOB_ID     ### write job information to output file
+
